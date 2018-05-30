@@ -1,0 +1,44 @@
+<body class="white-bg">
+	<div class="ibox-content">
+		<form class="form-horizontal no-margin" method="post" id="data-form">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="control-label col-xs-3">管理组名称</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" name="info[title]" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">描述</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" name="info[description]">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3"></label>
+					<div class="col-xs-5 m-top-xs">
+						<label>
+							<input type="radio" name="info[status]" value="1" checked> 开启</label>
+						<label>
+							<input type="radio" name="info[status]" value="-1"> 关闭</label>
+					</div>
+				</div>
+			</div>
+			<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function () {
+		$("#data-form").validate({
+			submitHandler: function (form) {
+				confirm();
+			}
+		});
+	})
+	function confirm() {
+		DM.post("{:url('groupAdd')}", $('#data-form').serialize(), function (ret) {
+			console.log(ret);
+		})
+	}
+</script>

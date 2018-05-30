@@ -1,0 +1,120 @@
+<body class="gray-bg">
+	{include file="body_common"}
+	<div class="ibox-content">
+		<div class="jqGrid_wrapper">
+			<form id="dmDataGridForm">
+				<table id="dmDataGrid"></table>
+				<div id="dmDataGridPage"></div>
+			</form>
+		</div>
+	</div>
+	<script>
+		var grid = $("#dmDataGrid").jqGrid({
+			url: "{:url('menulists')}",
+			height: "100%",
+			treeGrid: true,
+			treeGridModel: 'adjacency',
+			ExpandColumn: 'name',
+			ExpandColClick: true,  //表格点击
+			colModel: [
+				{
+					label: '排序', name: 'sort', width: 50, formatter: function (cellvalue, options, rowObject) {
+						var detail = '<input type="text" name="sorts[' + rowObject.id + ']" size="2" value="' + cellvalue + '">';
+						return detail;
+					}
+				},
+				{
+					label: '名称', name: 'name', width: 150, formatter: function (cellvalue, options, rowObject) {
+						if (rowObject.type == 2) {
+							return '<span class="text-info son">' + cellvalue + '</span>';
+						} else {
+							if (rowObject.parent_id != '0') {
+								return '<span class="son">' + cellvalue + '</span>';
+							} else {
+								return cellvalue;
+							}
+						}
+					}
+				},
+				{
+					label: '模块/控制器/方法', name: 'm', width: 200, formatter: function (cellvalue, options, rowObject) {
+						var detail = rowObject.m + "/" + rowObject.c + "/" + rowObject.a;
+						return detail;
+					}
+				},
+				{ label: '其他参数', name: 'data' },
+				{
+					label: '是否显示', name: 'display', width: 50, formatter: function (cellvalue, options, rowObject) {
+						if (rowObject.display == 1) {
+							var detail = '<span class="text-success">是</span>';
+						} else {
+							var detail = '<span class="text-danger">否</span>';
+						}
+						return detail;
+					}
+				},
+				{
+					label: '操作', name: '', width: 150, formatter: function (cellvalue, options, rowObject) {
+						var btns = [];
+						if (rowObject.parent_id == 0) {
+							btns.push('<a href="javascript:menuAdd(\'' + rowObject.id + '\',1)" class="text-info">添加子菜单</a>');
+							btns.push('&nbsp;|&nbsp;');
+						} else if (rowObject.type != 2) {
+							btns.push('<a href="javascript:menuAdd(\'' + rowObject.id + '\',2)" class="text-warning">添加操作项</a>');
+							btns.push('&nbsp;|&nbsp;');
+						}
+						btns.push('<a href="javascript:menuEdit(\'' + rowObject.id + '\')" class="text-info">编辑</a>');
+						btns.push('&nbsp;|&nbsp;');
+						btns.push('<a href="javascript:menuDelete(\'' + rowObject.id + '\')" class="text-danger">删除</a>');
+						return btns.join('');
+					}				
+				}
+			]
+		});
+		$("#dmDataGrid").navGrid('#dmDataGridPage', { refresh: false, edit: false, add: false, del: false, search: false }).navButtonAdd('#dmDataGridPage', {
+			caption: "排序",
+			buttonicon: "glyphicon glyphicon-sort page-btn",
+			onClickButton: function () {
+				menuSort();
+			},
+			position: "last"
+		});
+		var flag = true; //定义 开关
+		function treeFun() {
+			if (flag) {
+				$('.tree-minus').attr('class', 'glyphicon treeclick glyphicon-triangle-right tree-plus');
+				$('.son').closest('tr').css('display', 'none');
+				flag = false; $('.title-action a:eq(0)').text('展开树形');
+			} else {
+				$('.tree-plus').attr('class', 'glyphicon treeclick glyphicon-triangle-bottom tree-minus');
+				var tr = $('.son').closest('tr').css('display', '');
+				flag = true; $('.title-action a:eq(0)').text('收起树形');
+			}
+		}
+		// 排序
+		function menuSort() {
+			DM.post("{:url('menulists')}", $('#dmDataGridForm').serialize());
+		}
+		function menuAdd(pid, menuType) {
+			if (menuType == 2) {
+				var title = "添加操作项";
+				var height = "435px";
+			} else {
+				menuType = 1;
+				var title = "新增菜单";
+				var height = "500px";
+			}
+			if (pid) {
+				DM.open(title, '{:url("menuAdd")}?menuType=' + menuType + '&pid=' + pid, height);
+			} else {
+				DM.open(title, '{:url("menuAdd")}?menuType=' + menuType, height);
+			}
+		}
+		function menuEdit(id) {
+			DM.open("菜单编辑", "{:url('menuEdit','','')}/id/" + id);
+		}
+		function menuDelete(id) {
+			DM.delete("确定要删除吗?", "{:url('menuDelete')}", { id: id })
+		}
+	</script>
+</body>

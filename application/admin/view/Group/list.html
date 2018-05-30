@@ -1,0 +1,55 @@
+<body class="gray-bg">
+	{include file="body_common"}
+	<div class="ibox-content">
+		<div class="jqGrid_wrapper">
+			<form id="dmDataGridForm">
+				<table id="dmDataGrid"></table>
+				<div id="dmDataGridPage"></div>
+			</form>
+		</div>
+	</div>
+<script>
+	var grid = $("#dmDataGrid").jqGrid({
+		url: "{:url('groupLists')}",
+		height: "100%",
+		colModel: [
+			{ label: 'ID', name: 'id', width: 50 },
+			{ label: '名称', name: 'title', width: 150},
+			{ label: '描述', name: 'description', width: 150},
+			{ label: '状态', name: 'status', width:50,formatter: function (cellvalue, options, rowObject) {
+				if(cellvalue == 1){
+					var detail = '<span class="text-success">正常</span>';
+				}else{
+					var detail = '<span class="text-danger">禁止</span>';
+				}
+				return detail;
+			}},
+			{ label:'操作', name: '', width: 150, formatter: function (cellvalue, options, rowObject) {
+				var tableBtns = '{$tableBtns}';
+				if (!tableBtns) return '';
+				tableBtns = JSON.parse('{$tableBtns}');
+				if (tableBtns.length) {
+					var btns = [];
+					for (var i in tableBtns) {
+						btns.push('<a href="javascript:' + tableBtns[i].data + '(\'' + rowObject.id + '\')" class="text-' + tableBtns[i].color + '">' + tableBtns[i].name + '</a>');
+						if (i < tableBtns.length - 1) btns.push('&nbsp;|&nbsp;');
+					}
+				}
+				return btns.join('');
+			}}
+		]
+	});
+	function groupAdd(){
+		DM.open('新增管理组','{:url("groupAdd")}');
+	}
+	function groupSettingMenu(id) {
+		DM.open("编辑菜单权限", "{:url('groupSettingMenu','','')}/id/"+id);
+	}
+	function groupEdit(id) {
+		DM.open("管理组编辑", "{:url('groupEdit','','')}/id/"+id);
+	}
+	function groupDelete(id) {
+		DM.delete("确定要删除吗?", "{:url('groupDelete')}", { id: id })
+	}
+</script>
+</body>

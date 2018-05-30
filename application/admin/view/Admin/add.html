@@ -1,0 +1,63 @@
+<body class="white-bg">
+	<div class="ibox-content">
+		<form class="form-horizontal no-margin" method="post" id="data-form">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">登录账号</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[username]" class="form-control">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">登录密码</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[password]" class="form-control" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">真实姓名</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[realname]" class="form-control" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">手机号码</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[mobile]" class="form-control" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">邮箱</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[email]" class="form-control" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">管理组</label>
+					<div class="col-xs-7">
+						<select class="form-control sel-group" name="info[group_id]" required>
+							{foreach name="groupInfo" item="v"}
+								<option value="{$v.id}">{$v.title}</option>
+							{/foreach}
+						</select>
+					</div>
+				</div>
+			</div>
+			<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function () {
+		$("#data-form").validate({
+			submitHandler: function (form) {
+				confirm();
+			}
+		});
+	})
+	function confirm() {
+		DM.post("{:url('adminAdd')}", $('#data-form').serialize(), function (ret) {
+			console.log(ret);
+		})
+	}
+</script>

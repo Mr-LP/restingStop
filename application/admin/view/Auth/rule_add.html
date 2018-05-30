@@ -1,0 +1,51 @@
+<body class="gray-bg">
+	<div class="ibox-content">
+		<form class="form-horizontal no-margin" method="post" id="data-form">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">权限名称</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[title]" class="form-control" placeholder="权限名称">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">模块/控制器/方法</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[name]" class="form-control" placeholder="模块/控制器/方法">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">规则附件条件</label>
+					<div class="col-sm-7">
+						<input type="text" name="info[condition]" class="form-control" placeholder="{score}>5 and {score}<100">
+						<span class="help-block m-b-none">表示用户的分数在5-100之间时这条规则才会通过</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">状态</label>
+					<div class="col-sm-7">
+						<label class="radio-inline">
+							<input type="radio" checked="" name="info[status]" value="1">正常</label>
+						<label class="radio-inline">
+							<input type="radio" name="info[status]" value="0" >禁用</label>
+					</div>
+				</div>
+			</div>
+			<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function () {
+		$("#data-form").validate({
+			submitHandler: function (form) {
+				confirm();
+			}
+		});
+	})
+	function confirm() {
+		DM.post("{:url('ruleAdd')}", $('#data-form').serialize(), function (ret) {
+			console.log(ret);
+		})
+	}
+</script>

@@ -1,0 +1,64 @@
+<body class="white-bg">
+	<div class="ibox-content">
+		<form class="form-horizontal no-margin" method="post" id="dmDataForm">
+			<div class="col-md-12">
+				{foreach name="menuList" item="v"}
+				<div class="menu-check form-group">
+					<div class="m-top-md">
+						<label>
+							 {$groupData.id}<input class="auth-menus menus-row" type="checkbox" id="id-{$v['id']}" name="ids[]" value="{$v['id']}" {php}if(in_array($v[
+							    'id'], $menu_ids)){ {/php}checked {php} } {/php}> {$v.name}
+						</label>
+					</div>
+					<div class="child-row">
+						{foreach name="v['children']" item="r"}
+						<label>
+							<input class="auth-menus menus-list" type="checkbox" id="id-{$r['id']}" name="ids[]" value="{$r['id']}" parent-id="{$v['id']}"
+							    {php}if(in_array($r[ 'id'], $menu_ids)){ {/php}checked {php}}{/php}> {$r.name}
+						</label>
+						{/foreach}
+					</div>
+				</div>
+				{/foreach}
+			</div>
+			<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function () {
+		$("#dmDataForm").validate({
+			submitHandler: function (form) {
+				confirm();
+			}
+		});
+		$('.menus-row').on('change', function () {
+			$("input[parent-id='" + this.value + "']").prop('checked', this.checked);
+		});
+		$('.menus-list').on('change', function () {
+			var parentId = $(this).attr("parent-id");
+			if ($("input[parent-id='" + parentId + "']:checked").length) {
+				$("#id-" + parentId).prop('checked', this.checked);
+			} else {
+				$("#id-" + parentId).prop('checked', this.checked);
+			}
+		});
+	})
+
+	function confirm() {
+		var ids = '';
+		$("input[name='ids[]']:checked").each(function (i, n) {
+			ids += $(n).val() + ',';
+		});
+		iids = ids.substring(0, ids.length - 1);
+		if (iids == '' || !iids) {
+			DM.msg("请至少选择一个规则");
+			return false;
+		} else {
+			DM.post("{:url('groupSettingMenu')}", {
+				groupId: "{$id}",
+				ids: '' + ids + ''
+			});
+		}
+	}
+</script>

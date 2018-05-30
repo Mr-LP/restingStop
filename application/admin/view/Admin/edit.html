@@ -1,0 +1,72 @@
+<div class="smart-widget">
+	<div class="smart-widget-inner">
+		<div class="smart-widget-body">
+			<form class="form-horizontal no-margin" method="post" id="dmDataForm">
+				<input type="hidden" name="info[uid]" value="{$uid}" />
+				<div class="form-group">
+					<label class="control-label col-xs-3">登录账号</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" name="info[username]" value="{$username}" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">登录密码</label>
+					<div class="col-xs-5">
+						<input type="password" class="form-control input-sm" name="password">
+						<p>密码为空时为不修改</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">真实姓名</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" name="info[realname]" value="{$realname}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">手机号</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" name="info[mobile]" value="{$mobile}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">E-mail</label>
+					<div class="col-xs-5">
+						<input type="email" class="form-control input-sm" name="info[email]" value="{$email}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">会员头像</label>
+					<div class="col-xs-3">
+						<button type="button" class="btn btn-success btn-sm" id="select-btn">选取图片</button>
+						<input type="hidden" name="info[avatar]" value="{$avatar}" id="avatar">
+ 						{php}echo $uploader->uploader('image','select-btn','avatar',$avatar);{/php}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">管理组</label>
+					<div class="col-xs-5">
+						<select class="form-control sel-group" name="info[group_id]" required>
+							{foreach name="groupInfo" item="v"}
+								<option value="{$v.id}" {if condition="$v[id] eq $group_id" }selected{/if}>{$v.title}</option>
+							{/foreach}
+						</select>
+					</div>
+				</div>
+				<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="\static/admin/js/ajaxupload.js"></script>
+<script type="text/javascript">
+	$(function () {
+		$("#dmDataForm").validate({
+			submitHandler: function (form) {
+				confirm();
+			}
+		});
+	})
+	function confirm() {
+		DM.post("{:url('adminEdit')}", $('#dmDataForm').serialize());
+	}
+</script>

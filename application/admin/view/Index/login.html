@@ -1,0 +1,75 @@
+<script>if (window.top !== window.self) { window.top.location = window.location; }</script>
+<body class="login-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">L</h1>
+            </div>
+            <h3>欢迎使用 管理后台</h3>
+            <form class="m-t" role="form" method="post" action="{:url('login')}" id="login-form">
+                 {:token()}
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" placeholder="用户名" >
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="密码" >
+                </div>
+                <div class="form-group">
+                    <input type="text" class="col-sm-4" name="captcha"  placeholder="输入验证码">
+                    <div>
+                        <img src="{:captcha_src()}" alt="captcha" onClick="this.src='{:captcha_src()}'" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+                <p class="text-muted text-center">
+                    <a href="login.html#">
+                        <small>忘记密码了？</small>
+                    </a> |
+                    <a href="register.html">注册一个新账号</a>
+                </p>
+            </form>
+        </div>
+            <div class="copyright">('_COPYRIGHT')&nbsp;&nbsp;版权所有</div>
+    </div>
+</body>
+<script type="text/javascript">
+    //以下为官方示例
+        $().ready(function () {
+            var icon = "<i class='fa fa-times-circle'></i> ";
+            $("#login-form").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 2
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    captcha: {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 4
+                    }
+                },
+                messages: {
+                    username: {
+                        required: icon + "请输入您的用户名",
+                        minlength: icon + "用户名必须两个字符以上"
+                    },
+                    password: {
+                        required: icon + "请输入您的密码",
+                        minlength: icon + "密码必须5个字符以上"
+                    }
+                },
+                 submitHandler: function (form) {
+                    DM.post("{:url('login')}", $('#login-form').serialize(),function(ret){
+                        if (ret.url) {
+                             window.location.href = ret.url;
+                        }
+                    });
+                }
+            });
+        });
+</script>

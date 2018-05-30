@@ -1,0 +1,16 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>{:input('menuName')}</h2>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            {foreach name="topBtns" item="v"}
+                {if condition="$v['pos'] eq 1"}
+                    <a href="javascript:{$v.data}();" class="btn btn-sm btn-{$v.color} m-left-sm">{$v.name}</a>
+                {/if}
+            {/foreach}
+            <!-- <a href="javascript:void('0')" class="btn btn-primary treeFun">收起树形</a>
+            <a href="javascript:menuAdd();" class="btn btn-primary">添加菜单</a> -->
+        </div>
+    </div>
+</div>

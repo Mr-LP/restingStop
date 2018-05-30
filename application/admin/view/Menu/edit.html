@@ -1,0 +1,119 @@
+<body class="gray-bg">
+	<div class="ibox-content">
+		<form class="form-horizontal no-margin" method="post" id="dmDataForm">
+			<input type="hidden" name="id" value="{$id}"> 
+			{if condition="$type eq 2"}
+			<div class="form-group">
+				<label class="control-label col-xs-3">按钮名称</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[name]" value="{$name}" placeholder="请输入菜单名称" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">JS方法</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[data]" value="{$data}">
+					<p>请输入JavaScript方法名称，同页面内方法名不能有冲突</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">位置</label>
+				<div class="col-xs-5 m-top-xs">
+					<label>
+						<input type="radio" name="info[pos]" value="1" {if condition="$pos eq 1" }checked{/if}> 顶部右侧</label>
+					<label>
+						<input type="radio" name="info[pos]" value="2" {if condition="$pos eq 2" }checked{/if}> 列表内</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">颜色</label>
+				<div class="col-xs-5 m-top-xs">
+					<label>
+						<input type="radio" name="info[color]" value="info" {if condition="$color eq 'info'" }checked{/if}> 蓝</label>
+					<label>
+						<input type="radio" name="info[color]" value="success" {if condition="$color eq 'success'" }checked{/if}> 绿</label>
+					<label>
+						<input type="radio" name="info[color]" value="warning" {if condition="$color eq 'warning'" }checked{/if}> 黄</label>
+					<label>
+						<input type="radio" name="info[color]" value="danger" {if condition="$color eq 'danger'" }checked{/if}> 红</label>
+				</div>
+			</div>
+			{else /}
+			<div class="form-group">
+				<label class="control-label col-xs-3"></label>
+				<div class="col-xs-5">
+					<select class="form-control m-top-md" name="info[parent_id]">
+						<option value="0">作为一级菜单</option>
+						{foreach name="parentData" item="v"}
+						<option value="{$v['id']}" {php}if($v[ 'id']==$parent_id){{/php}selected="" {php}}{/php}>{$v['name']}</option>
+						{/foreach}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">菜单名称</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[name]" value="{$name}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">模块名称</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[m]" value="{$m}" readonly="">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">控制器名称</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[c]" value="{$c}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">方法名</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[a]" value="{$a}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">自定义参数</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[data]" value="{$data}">
+					<p>格式为&data1=1&data2=2，不允许使用m,c,a,s作为参数名</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-3">图标CLASS</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[icon_class]" value="{$icon_class}">
+				</div>
+			</div>
+			{/if}
+			<div class="form-group">
+				<label class="control-label col-xs-3">排序</label>
+				<div class="col-xs-5">
+					<input type="text" class="form-control input-sm" name="info[sort]" value="{$sort}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-xs-3"></label>
+				<div class="col-xs-5 m-top-xs">
+					<label>
+						<input type="radio" name="info[display]" value="1" {if condition="$display eq 1" }checked{/if}> 显示</label>
+					<label>
+						<input type="radio" name="info[display]" value="-1" {if condition="$display eq -1" }checked{/if}> 隐藏</label>
+				</div>
+			</div>
+			<input name="dosubmit" id="dosubmit" type="submit" value="提交" class="hide">
+		</form>
+	</div>
+	<script>
+		$(function(){
+			$("#dmDataForm").validate({
+				submitHandler:function(form){
+					DM.post("{:url('menuEdit')}", $('#dmDataForm').serialize());
+				}
+			});
+		})
+	</script>
+</body>
